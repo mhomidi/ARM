@@ -1,3 +1,7 @@
+
+`include "alu.v"
+`include "val_generate.v"
+
 module EXE_Stage_main #(parameter BIT_NUMBER = 32) (
   input clk,
   input [3:0] exe_cmd,
@@ -22,11 +26,11 @@ module EXE_Stage_main #(parameter BIT_NUMBER = 32) (
     .imm(imm),
     .shift_operand(shift_operand),
     .or_out(mem_en_out),
-    .val2(val2),
+    .val2(val2)
     );
 
     ALU alu1 (
-      .first(val_rn), second(val2),
+      .first(val_rn), .second(val2),
       .exe_cmd(exe_cmd), .sr(sr),
       .alu_result(alu_result),
       .status(status)

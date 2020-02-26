@@ -5,7 +5,7 @@ module EXE_Stage_reg_main #(parameter BIT_NUMBER = 32) (
   input [3:0] dest_in,
   output reg wb_en, mem_r_en, mem_w_en,
   output reg [BIT_NUMBER - 1:0] alu_result, st_val,
-  output reg [3:0] dest,
+  output reg [3:0] dest
   );
   always @ ( posedge clk, posedge rst ) begin
     if (rst) begin
