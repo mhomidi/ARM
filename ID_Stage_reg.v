@@ -18,12 +18,12 @@ module ID_Stage_reg_main (
 
   always @ ( posedge clk, posedge rst ) begin
     if (rst || flush == 1) begin
-      {wb_en_in, mem_r_en_in, mem_w_en_in, b_in, s_in,exe_cmd_in,
-        pc_in, val_rn_in, val_rm_in,
-        imm_in,
-        shift_operand_in,
-        signed_imm_24_in,
-        dest_in} = 100'd0;
+      {wb_en, mem_r_en, mem_w_en, b, s,exe_cmd,
+        pc, val_rn, val_rm,
+        imm,
+        shift_operand,
+        signed_imm_24,
+        dest} = 100'd0;
     end
     else begin
     {wb_en, mem_r_en, mem_w_en, b, s,exe_cmd,
@@ -36,7 +36,7 @@ module ID_Stage_reg_main (
               imm_in,
               shift_operand_in,
               signed_imm_24_in,
-              dest_in, sr_in}
+              dest_in, sr_in};
     end
   end
 endmodule // ID_Stage_reg_main

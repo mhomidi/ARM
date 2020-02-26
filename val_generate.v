@@ -3,8 +3,8 @@ module ValGenerate (
   input imm,
   input [11:0] shift_operand,
   input or_out,
-  output [31:0] val2,
+  output [31:0] val2
   );
   // TODO: val2 should be calculated.
-  val2 = 2;
+  assign val2 = 2;
 endmodule // ValGenerate

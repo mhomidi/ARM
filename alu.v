@@ -16,7 +16,7 @@ module ALU (
                       (exe_cmd == 4'b0101) ? first - second - 1 :
                       (exe_cmd == 4'b0110) ? first & second :
                       (exe_cmd == 4'b0111) ? first | second :
-                      (exe_cmd == 4'b1000) ? first ^ second;
+                      (exe_cmd == 4'b1000) ? first ^ second : 32'bz;
 
 // TODO: assign status;
 

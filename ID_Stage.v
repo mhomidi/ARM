@@ -1,3 +1,7 @@
+`include "mux.v"
+`include "register_file.v"
+`include "control_unit.v"
+
 module  ID_Stage_main #(parameter BIT_NUMBER=32, parameter REG_NUM_BITS = 4) (
   input clk, rst, write_back_en, hazard,
   input[REG_NUM_BITS-1:0] dest_wb, sr,
@@ -30,7 +34,7 @@ module  ID_Stage_main #(parameter BIT_NUMBER=32, parameter REG_NUM_BITS = 4) (
   RegisterFile # (.BIT_NUMBER(32), .MEM_VOL(16)) regfile (
     .clk(clk), .rst(rst),
     .src1(rn), .src2(mux_reg_out), .dest_wb(dest_wb),
-    ,result_wb(result_wb),
+    .result_wb(result_wb),
     .write_back_en(write_back_en),
     .reg1(val_rn), .reg2(val_rm)
     );
