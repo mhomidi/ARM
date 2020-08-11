@@ -6,9 +6,22 @@ module IF_Stage_reg #(parameter BIT_NUMBER = 32) (
   output [BIT_NUMBER-1:0] pc, instruction
   );
 
-  Register #(.BIT_NUMBER(BIT_NUMBER)) pc_reg (.in(pc_in), .rst(rst), .clk(clk),
-                            .freeze(freeze), .out(pc));
-
-  Register #(.BIT_NUMBER(BIT_NUMBER)) instruction_reg (.in(instruction_in), .rst(rst), .clk(clk),
-                            .freeze(freeze), .out(instruction));
+  always @ (posedge clk, posedge rst) begin
+    if (rst) begin
+      PC <= 0;
+      instruction <= 0;
+    end
+    else begin
+      if (~freeze) begin
+        if (flush) begin
+          instruction <= 0;
+          PC <= 0;
+        end
+        else begin
+          instruction <= instruction_in;
+          PC <= pc_in;
+        end
+      end
+    end
+  end
 endmodule
