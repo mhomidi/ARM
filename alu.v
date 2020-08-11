@@ -1,23 +1,66 @@
 module ALU (
   input [31:0] first, second,
   input [3:0] exe_cmd, sr,
-  output [31:0] alu_result,
-  output [3:0] status
+  output reg [31:0] alu_result,
+  output reg [3:0] status
   );
 
-  wire c;
+  wire cin;
+  reg z, cout, n, v;
 
-  assign c = sr[2];
-  assign alu_result = (exe_cmd == 4'b0001) ? second :
-                      (exe_cmd == 4'b1001) ? ~second :
-                      (exe_cmd == 4'b0010) ? first + second :
-                      (exe_cmd == 4'b0011) ? first + second + c :
-                      (exe_cmd == 4'b0100) ? first - second :
-                      (exe_cmd == 4'b0101) ? first - second - 1 :
-                      (exe_cmd == 4'b0110) ? first & second :
-                      (exe_cmd == 4'b0111) ? first | second :
-                      (exe_cmd == 4'b1000) ? first ^ second : 32'bz;
+  assign cin = sr[2];
 
-// TODO: assign status;
+  always @ ( * ) begin
+    {v, cout} = 2'b0;
+    case(exe_cmd)
+      4'b0001: begin
+        alu_result = second;
+      end
 
+      4'b1001: begin
+        alu_result = ~second;
+      end
+
+      4'b0010: begin
+        {cout, alu_result} = first + second;
+        v = ((first[31] == second[31]) & (alu_result[31] != first[31]));
+      end
+
+      4'b0011: begin
+        {cout, alu_result} = first + second + cin;
+        v = ((first[31] == second[31]) & (alu_result[31] != first[31]));
+      end
+
+      4'b0100: begin
+        {cout ,alu_result} = first - second;
+        v = ((first[31] == ~second[31]) & (alu_result[31] != first[31]));
+      end
+
+      4'b0101: begin
+        {cout ,alu_result} = first - second - 1;
+        v = ((first[31] == ~second[31]) & (alu_result[31] != first[31]));s
+      end
+
+      4'b0110: begin
+        alu_result = first & second;
+      end
+
+      4'b0111: begin
+        alu_result = first | second;
+      end
+
+      4'b1000: begin
+        alu_result = first ^ second
+      end
+
+      default: begin
+        alu_result = 32'bz;
+      end
+    endcase
+    status = {z, cout, n, v};
+  end
+  z = (alu_result == 31'b0 ? 1 : 0);
+  n = alu_result[31];
+
+  status = {z, cout, n, v};
 endmodule // ALU

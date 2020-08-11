@@ -23,7 +23,7 @@ module ID_Stage_reg_main (
         imm,
         shift_operand,
         signed_imm_24,
-        dest} = 100'd0;
+        dest} = 100'b0;
     end
     else begin
     {wb_en, mem_r_en, mem_w_en, b, s,exe_cmd,

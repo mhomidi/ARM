@@ -1,11 +1,10 @@
-module ConditionalCheck (
+module ConditionCheck (
     input [3:0] cond,
     input [3:0] sr,
     output reg out
     );
 
     wire z, c, n, v;
-    // TODO: order of status registers must be checked.
     assign {z, c, n, v} = sr;
 
     always @(*) begin
