@@ -48,7 +48,9 @@ module  ID_Stage_main #(parameter BIT_NUMBER=32, parameter REG_NUM_BITS = 4) (
     (.first(9'b0), .second(ctrl_out), .sel(cond_haz_out), .out(mux_ctrl_out));
 
   // Condition Check
-  assign cond_out = (cond == sr)?1'b1:1'b0;
+  ConditionCheck cond_check (
+    .cond(cond), .sr(sr), .out(cond_out)
+    );
 
   assign cond_haz_ou = ~cond_out | hazard;
 

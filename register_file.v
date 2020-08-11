@@ -15,12 +15,12 @@ module RegisterFile # (parameter BIT_NUMBER = 32, MEM_VOL = 16) (
   generate
       for (c = 0; c < MEM_VOL; c = c + 1) begin
           always @ (posedge rst) begin
-              my_memory[c] <= 1'b0;
+              my_memory[c] <= c;
           end
       end
   endgenerate
 
-  always @ ( posedge clk ) begin
+  always @ (negedge clk ) begin
     if (write_back_en) my_memory[dest_wb] = result_wb;
   end
 endmodule // RegisterFile

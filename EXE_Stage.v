@@ -25,7 +25,7 @@ module EXE_Stage_main #(parameter BIT_NUMBER = 32) (
     .val_rm(val_rm),
     .imm(imm),
     .shift_operand(shift_operand),
-    .or_out(mem_en_out),
+    .is_memory_ins(mem_en_out),
     .val2(val2)
     );
 
