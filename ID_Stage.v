@@ -24,6 +24,7 @@ module  ID_Stage_main #(parameter BIT_NUMBER=32, parameter REG_NUM_BITS = 4) (
   assign cond = instruction[31:28];
   assign rn = instruction[19:16];
   assign rm = instruction[3:0];
+  assign rd = instruction[15:12];
 
 
   assign dest = rd;
@@ -39,12 +40,12 @@ module  ID_Stage_main #(parameter BIT_NUMBER=32, parameter REG_NUM_BITS = 4) (
     .reg1(val_rn), .reg2(val_rm)
     );
 
-  // TODO: in this part, ask what is inputs???
+
   MUX # (.BIT_NUMBER(4)) mux_rm_rd
-    (.first(rm), .second(rd), .sel(mem_w_en), .out(mux_reg_out));
+    (.first(rd), .second(rm), .sel(mem_w_en), .out(mux_reg_out));
 
   MUX # (.BIT_NUMBER(9)) mux_ctrl
-    (.first(ctrl_out), .second(9'b0), .sel(cond_haz_out), .out(mux_ctrl_out));
+    (.first(9'b0), .second(ctrl_out), .sel(cond_haz_out), .out(mux_ctrl_out));
 
   // Condition Check
   assign cond_out = (cond == sr)?1'b1:1'b0;
@@ -68,14 +69,4 @@ module  ID_Stage_main #(parameter BIT_NUMBER=32, parameter REG_NUM_BITS = 4) (
     assign mem_r_en = mux_ctrl_out[7];
     assign wb_en = mux_ctrl_out[8];
 
-endmodule
-
-
-module ID_Stage #(parameter BIT_NUMBER = 32) (
-  input clk, rst,
-  input [BIT_NUMBER-1:0] pc_in, instruction_in,
-  output [BIT_NUMBER-1:0] pc, instruction
-  );
-  assign pc = pc_in;
-  assign instruction = instruction_in;
 endmodule
