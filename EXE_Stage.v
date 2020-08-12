@@ -2,7 +2,7 @@
 `include "alu.v"
 `include "val_generate.v"
 
-module EXE_Stage_main #(parameter BIT_NUMBER = 32) (
+module EXE_Stage #(parameter BIT_NUMBER = 32) (
   input clk,
   input [3:0] exe_cmd,
   input mem_r_en, mem_w_en,
@@ -36,18 +36,4 @@ module EXE_Stage_main #(parameter BIT_NUMBER = 32) (
       .status(status)
       );
 
-endmodule
-
-
-
-
-
-
-module EXE_Stage #(parameter BIT_NUMBER = 32) (
-  input clk, rst,
-  input [BIT_NUMBER-1:0] pc_in, instruction_in,
-  output [BIT_NUMBER-1:0] pc, instruction
-  );
-  assign pc = pc_in;
-  assign instruction = instruction_in;
 endmodule

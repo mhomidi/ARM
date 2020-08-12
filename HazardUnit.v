@@ -8,5 +8,5 @@ module HazardUnit # (parameter BIT_NUMBER = 32, MEM_VOL = 16) (
 	 assign hazard_Detected = ( (src1 == Exe_Dest) && Exe_WB_En == 4'b0001) ? 1'b1:
 	 						  ( (src1 == Mem_Dest) && Mem_WB_En == 4'b0001) ? 1'b1:
 	 						  ( (src2 == Exe_Dest) && Exe_WB_En == 4'b0001 && two_src == 1'b1) ? 1'b1:
-	 						  ( (src2 == Mem_Dest) && Mem_WB_En == 4'b0001 && two_src == 1'b1) ? 1'b1:
-endmodule 
+	 						  ( (src2 == Mem_Dest) && Mem_WB_En == 4'b0001 && two_src == 1'b1) ? 1'b1:1'b0;
+endmodule
