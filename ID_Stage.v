@@ -2,7 +2,7 @@
 `include "register_file.v"
 `include "control_unit.v"
 
-module  ID_Stage_main #(parameter BIT_NUMBER=32, parameter REG_NUM_BITS = 4) (
+module  ID_Stage #(parameter BIT_NUMBER=32, parameter REG_NUM_BITS = 4) (
   input clk, rst, write_back_en, hazard,
   input[REG_NUM_BITS-1:0] dest_wb, sr,
   input[BIT_NUMBER-1:0] instruction, result_wb,

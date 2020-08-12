@@ -38,7 +38,7 @@ module ALU (
 
       4'b0101: begin
         {cout ,alu_result} = first - second - 1;
-        v = ((first[31] == ~second[31]) & (alu_result[31] != first[31]));s
+        v = ((first[31] == ~second[31]) & (alu_result[31] != first[31]));
       end
 
       4'b0110: begin
@@ -50,17 +50,16 @@ module ALU (
       end
 
       4'b1000: begin
-        alu_result = first ^ second
+        alu_result = first ^ second;
       end
 
       default: begin
         alu_result = 32'bz;
       end
     endcase
+
+    z = (alu_result == 31'b0) ? 1 : 0;
+    n = alu_result[31];
     status = {z, cout, n, v};
   end
-  z = (alu_result == 31'b0 ? 1 : 0);
-  n = alu_result[31];
-
-  status = {z, cout, n, v};
 endmodule // ALU
