@@ -9,16 +9,11 @@ module EXE_stage_reg #(parameter BIT_NUMBER = 32) (
   );
   always @ ( posedge clk, posedge rst ) begin
     if (rst) begin
-      {wb_en, mem_r_en, mem_w_en,
-      alu_result, val_rm,
-      dest} = 71'b0;
+      {wb_en, mem_r_en, mem_w_en,alu_result, val_rm, dest} = 71'b0;
     end
     else begin
-      {wb_en, mem_r_en, mem_w_en,
-        alu_result, val_rm,
-        dest} = {wb_en_in, mem_r_en_in, mem_w_en_in,
-                  alu_result_in, val_rm_in,
-                  dest_in};
+      {wb_en, mem_r_en, mem_w_en, alu_result, val_rm, dest} = 
+      {wb_en_in, mem_r_en_in, mem_w_en_in, alu_result_in, val_rm_in, dest_in};
     end
   end
 endmodule

@@ -14,7 +14,7 @@ module ConditionCheck (
                 out <= z;
             end
 
-            4'b0000 : begin
+            4'b0001 : begin
                 out <= ~z;
             end
 

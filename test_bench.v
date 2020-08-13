@@ -5,7 +5,9 @@ module zzzz();
 
     ARM uut(clk, rst);
 
-    always #100 clk = ~clk;
+    initial begin
+    	repeat (1000) #100 clk = ~clk; 
+    end
 
     initial begin
     	#10

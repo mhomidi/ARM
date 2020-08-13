@@ -66,6 +66,7 @@ module ControlUnit (
           //EOR
           4'b0001: begin
             exe_cmd = 4'b1000;
+            wb_en = 1;
           end
 
           //CMP

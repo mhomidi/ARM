@@ -58,7 +58,7 @@ module ALU (
       end
     endcase
 
-    z = (alu_result == 31'b0) ? 1 : 0;
+    z = (alu_result == 32'b0) ? 1 : 0;
     n = alu_result[31];
     status = {z, cout, n, v};
   end

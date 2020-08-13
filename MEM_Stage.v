@@ -15,8 +15,8 @@ module MEM_stage #(parameter BIT_NUMBER = 32) (
 
   DataMemory memory (
     .clk(clk), .rst(rst),
-    .alu_result(alu_result_in),
-    .addr(val_rm),
+    .value(val_rm),
+    .addr(alu_result_in),
     .mem_w_en(mem_w_en), .mem_r_en(mem_r_en_in),
     .out(mem_data)
     );
