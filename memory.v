@@ -13,13 +13,13 @@ assign out = (mem_r_en)?{my_memory[addr + 3],
                         my_memory[addr]}:0;
 integer i;
 always @ ( posedge clk, posedge rst ) begin
-  if (rst): begin
-    for (i = 0; i < 4 * MEM_VOL; i = i + 1): begin
+  if (rst) begin
+    for (i = 0; i < 4 * MEM_VOL; i = i + 1) begin
       my_memory[i] = 0;
     end
   end
-  else: begin
-    if (mem_w_en): begin
+  else begin
+    if (mem_w_en) begin
       my_memory[addr] = alu_result[BIT_NUMBER-1:0];
       my_memory[addr + 1] = alu_result[2*BIT_NUMBER-1:1*BIT_NUMBER];
       my_memory[addr + 2] = alu_result[3*BIT_NUMBER-1:2*BIT_NUMBER];
