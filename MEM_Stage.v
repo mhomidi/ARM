@@ -8,10 +8,10 @@ module MEM_stage #(parameter BIT_NUMBER = 32) (
   output [3:0] dest_out
   );
 
-  assign alu_result_out = (alu_result_in);
-  assign mem_r_en_out = (mem_r_en_in);
-  assign wb_en_out = (wb_en_in);
-  assign dest_out = (dest_in);
+  assign alu_result_out = alu_result_in;
+  assign mem_r_en_out = mem_r_en_in;
+  assign wb_en_out = wb_en_in;
+  assign dest_out = dest_in;
 
   DataMemory memory (
     .clk(clk), .rst(rst),
