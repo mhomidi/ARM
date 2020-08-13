@@ -1,6 +1,6 @@
-module HazardUnit # (parameter BIT_NUMBER = 32, MEM_VOL = 16) (
-  input [4:0] src1, src2,
-  input [4:0] Exe_Dest,Mem_Dest,
+module hazard_unit(
+  input [3:0] src1, src2,
+  input [3:0] Exe_Dest,Mem_Dest,
   input two_src,
   input Exe_WB_En, Mem_WB_En,
   output hazard_Detected

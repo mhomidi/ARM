@@ -173,8 +173,6 @@ module ARM
 		////////////////////	GPIO	////////////////////////////
 		GPIO_0,							//	GPIO Connection 0
 		GPIO_1,							//	GPIO Connection 1
-		wb_pc_out,				// TODO:Delete it!
-		wb_instruction_out, // TODO: Delete it!
 	);
 
 ////////////////////////	Clock Input	 	////////////////////////
@@ -304,58 +302,102 @@ input          TD_CLK27;            //	TV Decoder 27MHz CLK
 inout	[35:0]	GPIO_0;					//	GPIO Connection 0
 inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 
-wire freeze, branch_taken, flush;
-wire [31:0] branch_address, if_pc, id_pc, if_instruction, id_instruction, id_pc_out, id_instruction_out,
-						ex_pc, ex_pc_out, ex_instruction, ex_instruction_out, mem_pc, mem_pc_out, mem_instruction,
-						mem_instruction_out, wb_pc, wb_instruction;
+wire freeze, flush, wb_wb_en, id_wb_en, id_mem_r_en, id_mem_w_en, id_b, id_s, id_imm, id_two_src, 
+	 id_reg_wb_en, id_reg_mem_r_en, id_reg_mem_w_en, id_reg_s, id_reg_imm, exe_reg_wb_en, exe_reg_mem_r_en, 
+	 exe_reg_mem_w_en, mem_mem_r_en, mem_wb_en, mem_reg_wb_en, mem_reg_mem_r_en;
+wire [3:0] status_register_out, dest_wb, id_exe_cmd, id_dest, id_first_src, id_second_src, id_reg_exe_cmd, id_reg_dest, id_reg_sr,
+			exe_sr, exe_reg_dest, mem_dest, mem_reg_dest, id_rn, id_src2;
+wire [11:0] id_shift_operand, id_reg_shift_operand;
+wire [23:0] id_signed_imm_24, id_reg_signed_imm_24;
+wire [31:0] branch_address, if_pc, id_pc, if_instruction, id_instruction, wb_value, id_val_rn, id_val_rm, 
+			id_reg_pc, id_reg_val_rn, id_reg_val_rm, exe_alu_result, exe_reg_alu_result, exe_reg_val_rm,
+			mem_alu_result, mem_mem_data;
 
-//TODO:Delete it!
-output reg[31:0] wb_pc_out, wb_instruction_out;
 
-
-IF_Stage #(.BIT_NUMBER(32), .MEM_VOL(2**32)) if_unit(
-  .clk(CLOCK_50), .rst(SW[1]), .freeze(freeze), .branch_taken(branch_taken),
+IF_stage #(.BIT_NUMBER(32), .MEM_VOL(2**32)) if_unit(
+  .clk(CLOCK_50), .rst(SW[1]), .freeze(freeze), .branch_taken(flush),
   .branch_address(branch_address),
   .pc(if_pc), .instruction(if_instruction)
 );
-IF_Stage_reg #(.BIT_NUMBER(32)) (
+IF_stage_reg #(.BIT_NUMBER(32)) if_reg_unit(
   .clk(CLOCK_50), .rst(SW[1]), .freeze(freeze), .flush(flush),
   .pc_in(if_pc), .instruction_in(if_instruction),
   .pc(id_pc), .instruction(id_instruction)
 );
-ID_Stage #(.BIT_NUMBER3(32)) (
+ID_stage #(.BIT_NUMBER(32),.REG_NUM_BITS(4)) id_unit(
+  .clk(CLOCK_50), .rst(SW[1]), .wb_wb_en(wb_wb_en), .hazard(freeze),
+  .dest_wb(dest_wb), .sr(status_register_out),
+  .instruction(id_instruction), .result_wb(wb_value),
+  .wb_en(id_wb_en), .mem_r_en(id_mem_r_en), .mem_w_en(id_mem_w_en), .b(id_b), .s(id_s), .imm(id_imm), .two_src(id_two_src),
+  .exe_cmd(id_exe_cmd), .dest(id_dest), .first_src(id_first_src), .second_src(id_second_src),
+  .shift_operand(id_shift_operand),
+  .signed_imm_24(id_signed_imm_24),
+  .val_rn(id_val_rn), .val_rm(id_val_rm)
+  );
+ID_stage_reg id_reg_unit(
+  .clk(CLOCK_50), .rst(SW[1]), .flush(flush),
+  .wb_en_in(id_wb_en), .mem_r_en_in(id_mem_r_en), .mem_w_en_in(id_mem_w_en), .b_in(id_b), .s_in(id_s),
+  .exe_cmd_in(id_exe_cmd),
+  .pc_in(id_pc), .val_rn_in(id_val_rn), .val_rm_in(id_val_rm),
+  .imm_in(id_imm),
+  .shift_operand_in(id_shift_operand),
+  .signed_imm_24_in(id_signed_imm_24),
+  .dest_in(id_dest), .sr_in(id_dest),
+  .wb_en(id_reg_wb_en), .mem_r_en(id_reg_mem_r_en), .mem_w_en(id_reg_mem_w_en), .b(flush), .s(id_reg_s),
+  .exe_cmd(id_reg_exe_cmd),
+  .pc(id_reg_pc), .val_rn(id_reg_val_rn), .val_rm(id_reg_val_rm),
+  .imm(id_reg_imm),
+  .shift_operand(id_reg_shift_operand),
+  .signed_imm_24(id_reg_signed_imm_24),
+  .dest(id_reg_dest), .sr(id_reg_sr)
+  );
+EXE_stage #(.BIT_NUMBER(32)) exe_unit (
+  .clk(CLOCK_50),
+  .exe_cmd(id_reg_exe_cmd),
+  .mem_r_en(id_reg_mem_r_en), .mem_w_en(id_reg_mem_w_en),
+  .pc(id_reg_pc), .val_rn(id_reg_val_rn), .val_rm(id_reg_val_rm),
+  .imm(id_reg_imm),
+  .shift_operand(id_reg_shift_operand),
+  .signed_imm_24(id_reg_signed_imm_24),
+  .sr(id_reg_sr),
+  .alu_result(exe_alu_result), .br_addr(branch_address),
+  .status(exe_sr)
+  );
+EXE_stage_reg #(.BIT_NUMBER(32)) exe_reg_unit (
   .clk(CLOCK_50), .rst(SW[1]),
-  .pc_in(id_pc), instruction_in(id_instruction),
-  .pc(id_pc_out), .instruction(id_instruction_out)
-);
-ID_Stage_reg #(.BIT_NUMBER(32)) (
-  .clk(CLOCK_50), .rst(SW[1]), .freeze(freeze), .flush(flush),
-  .pc_in(id_pc_out), .instruction_in(id_instruction_out),
-  .pc(ex_pc), .instruction(ex_instruction)
-);
-EXE_Stage #(.BIT_NUMBER(32)) (
+  .wb_en_in(id_reg_wb_en), .mem_r_en_in(id_reg_mem_r_en), .mem_w_en_in(id_reg_mem_w_en),
+  .alu_result_in(exe_alu_result), .val_rm_in(id_reg_val_rm),
+  .dest_in(id_reg_dest),
+  .wb_en(exe_reg_wb_en), .mem_r_en(exe_reg_mem_r_en), .mem_w_en(exe_reg_mem_w_en),
+  .alu_result(exe_reg_alu_result), .val_rm(exe_reg_val_rm),
+  .dest(exe_reg_dest)
+  );
+MEM_stage #(.BIT_NUMBER(32)) mem_unit (
   .clk(CLOCK_50), .rst(SW[1]),
-  .pc_in(ex_pc), instruction_in(ex_instruction),
-  .pc(ex_pc_out), .instruction(ex_instruction_out)
-);
-EXE_Stage_reg #(.BIT_NUMBER(32)) (
-  .clk(CLOCK_50), .rst(SW[1]), .freeze(freeze), .flush(flush),
-  .pc_in(ex_pc_out), .instruction_in(ex_instruction_out),
-  .pc(mem_pc), .instruction(mem_instruction)
-);
-MEM_Stage #(.BIT_NUMBER(32)) (
-  .clk(CLOCK_50), .rst(SW[1]),
-  .pc_in(mem_pc), instruction_in(mem_instruction),
-  .pc(mem_pc_out), .instruction(mem_instruction_out)
-);
-MEM_Stage_reg #(.BIT_NUMBER(32)) (
-  .clk(CLOCK_50), .rst(SW[1]), .freeze(freeze), .flush(flush),
-  .pc_in(mem_pc_out), .instruction_in(mem_instruction_out),
-  .pc(wb_pc), .instruction(wb_instruction)
-);
-WB_Stage #(.BIT_NUMBER3(32)) (
-  .clk(CLOCK_50), .rst(SW[1]),
-  .pc_in(wb_pc), instruction_in(wb_instruction),
-  .pc(id_pc_out), .instruction(id_instruction_out)
-);
+  .wb_en_in(exe_reg_wb_en), .mem_r_en_in(exe_reg_mem_r_en), .mem_w_en(exe_reg_mem_w_en),
+  .alu_result_in(exe_reg_alu_result), .val_rm(exe_reg_val_rm),
+  .dest_in(exe_reg_dest),
+  .mem_r_en_out(mem_mem_r_en), .wb_en_out(mem_wb_en),
+  .alu_result_out(mem_alu_result), .mem_data(mem_mem_data),
+  .dest_out(mem_dest)
+  );
+MEM_stage_reg #(.BIT_NUMBER(32)) mem_reg_unit(
+  .clk(CLOCK_50), .rst(SW[1]), .WB_en_in(mem_wb_en), .Mem_R_en_in(mem_mem_r_en),
+  .ALU_result_in(mem_alu_result), .Mem_read_value_in(mem_data),
+  .Dest_in(mem_dest),
+  .WB_en(mem_reg_wb_en), .Mem_R_en(mem_reg_mem_r_en), 
+  .ALU_result(mem_reg_alu_result), .Mem_read_value(mem_reg_mem_data),
+  .Dest(mem_reg_dest)
+  );
+WB_stage #(.BIT_NUMBER(32)) wb_unit(
+  .ALU_result(mem_reg_alu_result), .Mem_result(mem_reg_mem_data),
+  .Mem_R_en(mem_reg_mem_r_en), .WB_en_in(mem_reg_wb_en),
+  .Dest_in(mem_reg_dest),
+  .out(wb_value),
+  .WB_en(wb_wb_en),
+  .Dest(dest_wb)
+  );
+status_register status_register_unit(.in(exe_sr), .S(id_reg_s), .clk(CLOCK_50), .rst(SW[1]), .out(status_register_out));
+hazard_unit hazard_detector(.src1(id_first_src), .src2(id_second_src), .Exe_Dest(id_reg_dest), .Mem_Dest(exe_reg_dest), 
+							.two_src(id_two_src),.Exe_WB_En(id_reg_wb_en), .Mem_WB_En(exe_reg_wb_en), .hazard_Detected(freeze));
 endmodule

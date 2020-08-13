@@ -1,9 +1,5 @@
-`include "mux.v"
-`include "register_file.v"
-`include "control_unit.v"
-
-module  ID_Stage #(parameter BIT_NUMBER=32, parameter REG_NUM_BITS = 4) (
-  input clk, rst, write_back_en, hazard,
+module  ID_stage #(parameter BIT_NUMBER=32, parameter REG_NUM_BITS = 4) (
+  input clk, rst, wb_wb_en, hazard,
   input[REG_NUM_BITS-1:0] dest_wb, sr,
   input[BIT_NUMBER-1:0] instruction, result_wb,
   output wb_en, mem_r_en, mem_w_en, b, s, imm, two_src,
@@ -14,7 +10,7 @@ module  ID_Stage #(parameter BIT_NUMBER=32, parameter REG_NUM_BITS = 4) (
   );
   wire [3:0] op_code, rn, rd, cond, rm, mux_reg_out;
   wire [1:0] mode;
-  wire imm, s_in, cond_haz_out, cond_out;
+  wire s_in, cond_haz_out, cond_out;
   wire [8:0] ctrl_out, mux_ctrl_out;
 
   assign mode = instruction[27:26];
@@ -36,7 +32,7 @@ module  ID_Stage #(parameter BIT_NUMBER=32, parameter REG_NUM_BITS = 4) (
     .clk(clk), .rst(rst),
     .src1(rn), .src2(mux_reg_out), .dest_wb(dest_wb),
     .result_wb(result_wb),
-    .write_back_en(write_back_en),
+    .wb_wb_en(wb_wb_en),
     .reg1(val_rn), .reg2(val_rm)
     );
 
@@ -55,7 +51,9 @@ module  ID_Stage #(parameter BIT_NUMBER=32, parameter REG_NUM_BITS = 4) (
   assign cond_haz_ou = ~cond_out | hazard;
 
   assign two_src = ~imm | mem_w_en;
-
+  assign first_src = rn;
+  assign  second_src = mux_reg_out;
+  
   ControlUnit ctrl_unit (
     .op_code(op_code),
     .mode(mode),

@@ -1,8 +1,4 @@
-
-`include "alu.v"
-`include "val_generate.v"
-
-module EXE_Stage #(parameter BIT_NUMBER = 32) (
+module EXE_stage #(parameter BIT_NUMBER = 32) (
   input clk,
   input [3:0] exe_cmd,
   input mem_r_en, mem_w_en,
@@ -20,7 +16,6 @@ module EXE_Stage #(parameter BIT_NUMBER = 32) (
   assign mem_en_out = mem_r_en | mem_w_en;
   assign br_addr = pc + signed_imm_24;
 
-  // TODO: should be implemented
   ValGenerate val_gen (
     .val_rm(val_rm),
     .imm(imm),
@@ -34,6 +29,6 @@ module EXE_Stage #(parameter BIT_NUMBER = 32) (
       .exe_cmd(exe_cmd), .sr(sr),
       .alu_result(alu_result),
       .status(status)
-      );
+    );
 
 endmodule

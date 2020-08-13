@@ -1,4 +1,4 @@
-module ID_Stage_reg (
+module ID_stage_reg (
   input clk, rst, flush,
   input wb_en_in, mem_r_en_in, mem_w_en_in, b_in, s_in,
   input [3:0] exe_cmd_in,

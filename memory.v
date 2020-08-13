@@ -3,7 +3,7 @@ module DataMemory #(parameter  BIT_NUMBER = 8, parameter MEM_VOL = 2**32) (
   input [4*BIT_NUMBER-1:0] alu_result,
   input [BIT_NUMBER-1:0] addr,
   input mem_w_en, mem_r_en,
-  output reg [4*BIT_NUMBER-1:0] out
+  output [4*BIT_NUMBER-1:0] out
   );
 reg [BIT_NUMBER-1:0] my_memory [0:4 * MEM_VOL - 1];
 

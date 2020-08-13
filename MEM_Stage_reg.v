@@ -14,6 +14,6 @@ module MEM_stage_reg #(parameter BIT_NUMBER = 32) (
                                        					.freeze(1'b0), .out(ALU_result));
   Register #(.BIT_NUMBER(BIT_NUMBER)) Mem_read_value_reg (.in(Mem_read_value_in), .rst(rst), .clk(clk),
                                                    		.freeze(1'b0), .out(Mem_read_value));
-  Register #(.BIT_NUMBER(4)) ALU_result_reg (.in(Dest_in), .rst(rst), .clk(clk),
+  Register #(.BIT_NUMBER(4)) dest_reg (.in(Dest_in), .rst(rst), .clk(clk),
                    							.freeze(1'b0), .out(Dest));
 endmodule

@@ -1,4 +1,4 @@
-module EXE_Stage_reg #(parameter BIT_NUMBER = 32) (
+module EXE_stage_reg #(parameter BIT_NUMBER = 32) (
   input clk, rst,
   input wb_en_in, mem_r_en_in, mem_w_en_in,
   input [BIT_NUMBER - 1:0] alu_result_in, val_rm_in,

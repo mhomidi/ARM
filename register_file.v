@@ -2,7 +2,7 @@ module RegisterFile # (parameter BIT_NUMBER = 32, MEM_VOL = 16) (
   input clk, rst,
   input [3:0] src1, src2, dest_wb,
   input [31:0] result_wb,
-  input write_back_en,
+  input wb_wb_en,
   output [31:0] reg1, reg2
   );
 
@@ -21,6 +21,6 @@ module RegisterFile # (parameter BIT_NUMBER = 32, MEM_VOL = 16) (
   endgenerate
 
   always @ (negedge clk ) begin
-    if (write_back_en) my_memory[dest_wb] = result_wb;
+    if (wb_wb_en) my_memory[dest_wb] = result_wb;
   end
 endmodule // RegisterFile
