@@ -24,7 +24,7 @@ module EXE_stage #(parameter BIT_NUMBER = 32) (
     .val2(val2)
     );
 
-    ALU alu1 (
+    ALU alu (
       .first(val_rn), .second(val2),
       .exe_cmd(exe_cmd), .sr(sr),
       .alu_result(alu_result),

@@ -1,4 +1,4 @@
-module DataMemory #(parameter  BIT_NUMBER = 8, parameter MEM_VOL = 2**32) (
+module DataMemory #(parameter  BIT_NUMBER = 8, parameter MEM_VOL = 2**10) (
   input clk, rst,
   input [4*BIT_NUMBER-1:0] alu_result,
   input [BIT_NUMBER-1:0] addr,
@@ -30,7 +30,7 @@ end
 endmodule
 
 
-module InstructionMemory #(parameter  BIT_NUMBER = 8, parameter MEM_VOL = 2**32) (
+module InstructionMemory #(parameter  BIT_NUMBER = 8, parameter MEM_VOL = 2**10) (
   input [BIT_NUMBER-1:0] in,
   input   rst, 
   output reg [BIT_NUMBER-1:0] out

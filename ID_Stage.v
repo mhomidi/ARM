@@ -48,7 +48,7 @@ module  ID_stage #(parameter BIT_NUMBER=32, parameter REG_NUM_BITS = 4) (
     .cond(cond), .sr(sr), .out(cond_out)
     );
 
-  assign cond_haz_ou = ~cond_out | hazard;
+  assign cond_haz_out = ~cond_out | hazard;
 
   assign two_src = ~imm | mem_w_en;
   assign first_src = rn;
@@ -58,7 +58,7 @@ module  ID_stage #(parameter BIT_NUMBER=32, parameter REG_NUM_BITS = 4) (
     .op_code(op_code),
     .mode(mode),
     .s_in(s_in),
-    .s(ctrl_out[0]), .b(ctrl_out[1]), .exe_cmd(ctrl_out[5:2]), .mem_w_en(ctrl_out[6]),
+    .s(ctrl_out[0]),.b(ctrl_out[1]), .exe_cmd(ctrl_out[5:2]), .mem_w_en(ctrl_out[6]),
     .mem_r_en(ctrl_out[7]), .wb_en(ctrl_out[8])
     );
 

@@ -11,7 +11,7 @@ wire [31:0] branch_address, if_pc, id_pc, if_instruction, id_instruction, wb_val
 			mem_alu_result, mem_mem_data, mem_data, mem_reg_alu_result, mem_reg_mem_data;
 
 
-IF_stage #(.BIT_NUMBER(32), .MEM_VOL(2**32)) if_unit(
+IF_stage #(.BIT_NUMBER(32), .MEM_VOL(2**10)) if_unit(
   .clk(clk), .rst(rst), .freeze(freeze), .branch_taken(flush),
   .branch_address(branch_address),
   .pc(if_pc), .instruction(if_instruction)
@@ -80,7 +80,7 @@ MEM_stage #(.BIT_NUMBER(32)) mem_unit (
   );
 MEM_stage_reg #(.BIT_NUMBER(32)) mem_reg_unit(
   .clk(clk), .rst(rst), .WB_en_in(mem_wb_en), .Mem_R_en_in(mem_mem_r_en),
-  .ALU_result_in(mem_alu_result), .Mem_read_value_in(mem_data),
+  .ALU_result_in(mem_alu_result), .Mem_read_value_in(mem_mem_data),
   .Dest_in(mem_dest),
   .WB_en(mem_reg_wb_en), .Mem_R_en(mem_reg_mem_r_en), 
   .ALU_result(mem_reg_alu_result), .Mem_read_value(mem_reg_mem_data),

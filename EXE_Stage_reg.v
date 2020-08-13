@@ -11,7 +11,7 @@ module EXE_stage_reg #(parameter BIT_NUMBER = 32) (
     if (rst) begin
       {wb_en, mem_r_en, mem_w_en,
       alu_result, val_rm,
-      dest} = 100'b0;
+      dest} = 71'b0;
     end
     else begin
       {wb_en, mem_r_en, mem_w_en,
