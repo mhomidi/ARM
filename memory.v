@@ -34,12 +34,9 @@ endmodule
 module InstructionMemory #(parameter  BIT_NUMBER = 8, parameter MEM_VOL = 2**10) (
   input [BIT_NUMBER-1:0] in,
   input   rst, 
-  output reg [BIT_NUMBER-1:0] out
+  output reg [4*BIT_NUMBER-1:0] out
   );
-
   reg [BIT_NUMBER-1:0] my_memory [0:4 * MEM_VOL - 1];
-  wire [31:0] addr_msb;
-  assign addr_msb = {in[31:2], 2'b0};
 
   always @(*) begin
     if (rst) begin
@@ -88,43 +85,24 @@ module InstructionMemory #(parameter  BIT_NUMBER = 8, parameter MEM_VOL = 2**10)
       {my_memory[148], my_memory[149], my_memory[150], my_memory[151]} = 32'b1110_00_1_1010_1_0011_0000_000000000011; //CMP R3 ,#3
       {my_memory[152], my_memory[153], my_memory[154], my_memory[155]} = 32'b1011_10_1_0_111111111111111111110111 ; //BLT #-9
 
-      // {my_memory[156], my_memory[157], my_memory[158], my_memory[159]} = 32'b1110_00_1_0100_0_0010_0010_000000000001; //ADD R2 ,R2,#1
-      // {my_memory[160], my_memory[161], my_memory[162], my_memory[163]} = 32'b1110_00_0_1010_1_0010_0000_000000000001; //CMP R2 ,R1
+      {my_memory[156], my_memory[157], my_memory[158], my_memory[159]} = 32'b1110_00_1_0100_0_0010_0010_000000000001; //ADD R2 ,R2,#1
+      {my_memory[160], my_memory[161], my_memory[162], my_memory[163]} = 32'b1110_00_0_1010_1_0010_0000_000000000001; //CMP R2 ,R1
 
-      // {my_memory[164], my_memory[165], my_memory[166], my_memory[167]} = 32'b1011_10_1_0_111111111111111111110011 ; //BLT #-13
+      {my_memory[164], my_memory[165], my_memory[166], my_memory[167]} = 32'b1011_10_1_0_111111111111111111110011 ; //BLT #-13
 
-      // {my_memory[168], my_memory[169], my_memory[170], my_memory[171]} = 32'b1110_01_0_0100_1_0000_0001_000000000000; //LDR R1 ,[R0],#0 //R1 = -2147483648
-      // {my_memory[172], my_memory[173], my_memory[174], my_memory[175]} = 32'b1110_01_0_0100_1_0000_0010_000000000100; //LDR R2 ,[R0],#4 //R2 = -1073741824
-      // {my_memory[176], my_memory[177], my_memory[178], my_memory[179]} = 32'b1110_01_0_0100_1_0000_0011_000000001000; //STR R3 ,[R0],#8 //R3 = 41
-      // {my_memory[180], my_memory[181], my_memory[182], my_memory[183]} = 32'b1110_01_0_0100_1_0000_0100_000000001100; //STR R4 ,[R0],#12 //R4 = 8192
-      // {my_memory[184], my_memory[185], my_memory[186], my_memory[187]} = 32'b1110_01_0_0100_1_0000_0101_000000010000; //STR R5 ,[R0],#16
-      // {my_memory[188], my_memory[189], my_memory[190], my_memory[191]} = 32'b1110_01_0_0100_1_0000_0110_000000010100; //STR R6 ,[R0],#20
-      // {my_memory[192], my_memory[193], my_memory[194], my_memory[195]} = 32'b1110_10_1_0_111111111111111111111111 ; //B #-1
-
-
-      // my_memory[196] <= 8'b11100000;
-      // my_memory[197] <= 8'b00000000;
-      // my_memory[198] <= 8'b00000000;
-      // my_memory[199] <= 8'b00000000;
-
-      // my_memory[200] <= 8'b11100000;
-      // my_memory[201] <= 8'b00000000;
-      // my_memory[202] <= 8'b00000000;
-      // my_memory[203] <= 8'b00000000;
-
-      // my_memory[204] <= 8'b11100000;
-      // my_memory[205] <= 8'b00000000;
-      // my_memory[206] <= 8'b00000000;
-      // my_memory[207] <= 8'b00000000;
-
-      // my_memory[208] <= 8'b11100000;
-      // my_memory[209] <= 8'b00000000;
-      // my_memory[210] <= 8'b00000000;
-      // my_memory[211] <= 8'b00000000;
-  
+      {my_memory[168], my_memory[169], my_memory[170], my_memory[171]} = 32'b1110_01_0_0100_1_0000_0001_000000000000; //LDR R1 ,[R0],#0 //R1 = -2147483648
+      {my_memory[172], my_memory[173], my_memory[174], my_memory[175]} = 32'b1110_01_0_0100_1_0000_0010_000000000100; //LDR R2 ,[R0],#4 //R2 = -1073741824
+      {my_memory[176], my_memory[177], my_memory[178], my_memory[179]} = 32'b1110_01_0_0100_1_0000_0011_000000001000; //LDR R3 ,[R0],#8 //R3 = 41
+      {my_memory[180], my_memory[181], my_memory[182], my_memory[183]} = 32'b1110_01_0_0100_1_0000_0100_000000001100; //LDR R4 ,[R0],#12 //R4 = 8192
+      {my_memory[184], my_memory[185], my_memory[186], my_memory[187]} = 32'b1110_01_0_0100_1_0000_0101_000000010000; //LDR R5 ,[R0],#16 //R5 = -123
+      {my_memory[188], my_memory[189], my_memory[190], my_memory[191]} = 32'b1110_01_0_0100_1_0000_0110_000000010100; //LDR R6 ,[R0],#20 //R6 = 9
+      {my_memory[192], my_memory[193], my_memory[194], my_memory[195]} = 32'b1110_10_1_0_111111111111111111111111 ; //B #-1
+      {my_memory[196], my_memory[197], my_memory[198], my_memory[199]} = 32'b1111_00_0_0_000000000000000000000000 ;
+      {my_memory[200], my_memory[201], my_memory[202], my_memory[203]} = 32'b1111_00_0_0_000000000000000000000000 ;
+      {my_memory[204], my_memory[205], my_memory[206], my_memory[207]} = 32'b1111_00_0_0_000000000000000000000000 ;
     end
     else begin
-      out <= {my_memory[addr_msb], my_memory[addr_msb + 1], my_memory[addr_msb + 2], my_memory[addr_msb + 3]};
+      out <= {my_memory[in], my_memory[in + 1], my_memory[in + 2], my_memory[in + 3]};
     end
   end
 endmodule

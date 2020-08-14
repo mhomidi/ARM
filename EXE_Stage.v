@@ -12,9 +12,10 @@ module EXE_stage #(parameter BIT_NUMBER = 32) (
   );
   wire mem_en_out;
   wire [31:0] val2;
-
+  wire [31:0] sign_extend_imm;
+  assign sign_extend_imm = $signed(signed_imm_24) << 2;
   assign mem_en_out = mem_r_en | mem_w_en;
-  assign br_addr = pc + signed_imm_24;
+  assign br_addr = pc + sign_extend_imm;
 
   ValGenerate val_gen (
     .val_rm(val_rm),

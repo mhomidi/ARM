@@ -12,7 +12,7 @@ module IF_stage_reg #(parameter BIT_NUMBER = 32) (
     else begin
       if (~freeze) begin
         if (flush) begin
-          instruction <= 0;
+          instruction <= 32'b11110000000000000000000000000000;
           pc <= 0;
         end
         else begin
