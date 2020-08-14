@@ -96,8 +96,9 @@ WB_stage #(.BIT_NUMBER(32)) wb_unit(
   .Dest(dest_wb)
   );
 status_register status_register_unit(.in(exe_sr), .S(id_reg_s), .clk(clk), .rst(rst), .out(status_register_out));
-hazard_unit hazard_detector(.src1(id_src1), .src2(id_src2), .Exe_Dest(id_reg_dest), .Mem_Dest(exe_reg_dest),
-							.two_src(id_two_src),.Exe_WB_En(id_reg_wb_en), .Mem_WB_En(exe_reg_wb_en), .hazard_Detected(freeze));
+HazardUnit hazard_detector(.src1(id_src1), .src2(id_src2), .Exe_Dest(id_reg_dest), .Mem_Dest(exe_reg_dest),
+							.two_src(id_two_src),.Exe_WB_En(id_reg_wb_en), .Mem_WB_En(exe_reg_wb_en), .hazard_Detected(freeze),
+							.forward_en(forward_en));
 
 ForwardingUnit forward_unit(
 	.src1(id_reg_src1), .src2(id_reg_src2), .wb_dest(dest_wb), .mem_dest(exe_reg_dest),
