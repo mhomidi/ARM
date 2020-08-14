@@ -6,7 +6,7 @@ module WB_stage #(parameter BIT_NUMBER = 32) (
   output WB_en,
   output [3:0] Dest
   );
-	MUX #(.BIT_NUMBER(BIT_NUMBER)) wb_mux (.first(Mem_result), .second(ALU_result), .sel(Mem_R_en), .out(out));
+	MUX2 #(.BIT_NUMBER(BIT_NUMBER)) wb_mux (.first(ALU_result), .second(Mem_result), .sel(Mem_R_en), .out(out));
 	assign WB_en = WB_en_in;
 	assign Dest = Dest_in;
 endmodule

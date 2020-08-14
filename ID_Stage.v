@@ -37,11 +37,11 @@ module  ID_stage #(parameter BIT_NUMBER=32, parameter REG_NUM_BITS = 4) (
     );
 
 
-  MUX # (.BIT_NUMBER(4)) mux_rm_rd
-    (.first(rd), .second(rm), .sel(mem_w_en), .out(mux_reg_out));
+  MUX2 # (.BIT_NUMBER(4)) mux_rm_rd
+    (.first(rm), .second(rd), .sel(mem_w_en), .out(mux_reg_out));
 
-  MUX # (.BIT_NUMBER(9)) mux_ctrl
-    (.first(9'b0), .second(ctrl_out), .sel(cond_haz_out), .out(mux_ctrl_out));
+  MUX2 # (.BIT_NUMBER(9)) mux_ctrl
+    (.first(ctrl_out), .second(9'b0), .sel(cond_haz_out), .out(mux_ctrl_out));
 
   // Condition Check
   ConditionCheck cond_check (
@@ -53,7 +53,7 @@ module  ID_stage #(parameter BIT_NUMBER=32, parameter REG_NUM_BITS = 4) (
   assign two_src = ~imm | mem_w_en;
   assign first_src = rn;
   assign  second_src = mux_reg_out;
-  
+
   ControlUnit ctrl_unit (
     .op_code(op_code),
     .mode(mode),
