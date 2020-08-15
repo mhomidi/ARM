@@ -12,6 +12,6 @@ module HazardUnit(
 
   assign hazard_forwarding = ( (src1 == Exe_Dest) && Exe_WB_En) ? 1'b1:
             ( (src2 == Exe_Dest) && Exe_WB_En && two_src) ? 1'b1:1'b0;
-  assign hazard_Detected = (forward_en) ? hazard_forwarding : hazard_not_forwarding
+  assign hazard_Detected = (forward_en) ? hazard_forwarding : hazard_not_forwarding;
 
 endmodule

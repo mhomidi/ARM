@@ -2,7 +2,8 @@
 module EXE_stage #(parameter BIT_NUMBER = 32) (
   input clk,
   input [3:0] exe_cmd,
-  input mem_r_en, mem_w_en, sel_src1, sel_src2,
+  input mem_r_en, mem_w_en,
+  input [1:0] sel_src1, sel_src2,
   input [31:0] pc, val_rn, val_rm_in,
   input imm,
   input [11:0] shift_operand,
@@ -19,12 +20,12 @@ module EXE_stage #(parameter BIT_NUMBER = 32) (
   assign br_addr = pc + sign_extend_imm;
 
   MUX3 val_rm_mux (
-     .first(val_rm_in), .second(mem_addr), .third(wb_value), .sel(sel_src1), .out(val_rm)
+     .first(val_rm_in), .second(mem_addr), .third(wb_value), .sel(sel_src2), .out(val_rm)
      );
 
 
   MUX3 val1_mux (
-     .first(val_rn), .second(mem_addr), .third(wb_value), .sel(sel_src2), .out(val1)
+     .first(val_rn), .second(mem_addr), .third(wb_value), .sel(sel_src1), .out(val1)
      );
 
 

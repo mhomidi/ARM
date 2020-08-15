@@ -2,15 +2,16 @@
 module ARM(input clk, rst, forward_en);
 wire freeze, flush, wb_wb_en, id_wb_en, id_mem_r_en, id_mem_w_en, id_b, id_s, id_imm, id_two_src,
 	 id_reg_wb_en, id_reg_mem_r_en, id_reg_mem_w_en, id_reg_s, id_reg_imm, exe_reg_wb_en, exe_reg_mem_r_en,
-	 exe_reg_mem_w_en, mem_mem_r_en, mem_wb_en, mem_reg_wb_en, mem_reg_mem_r_en, sel_src1, sel_src2;
+	 exe_reg_mem_w_en, mem_mem_r_en, mem_wb_en, mem_reg_wb_en, mem_reg_mem_r_en;
+wire [1:0] sel_src1, sel_src2;
 wire [3:0] status_register_out, dest_wb, id_exe_cmd, id_dest, id_src1, id_src2, id_reg_exe_cmd, id_reg_dest, id_reg_sr,
-			exe_sr, exe_reg_dest, mem_dest, mem_reg_dest, id_rn, id_reg_src1, id_reg_src2, exe_val_rm;
+			exe_sr, exe_reg_dest, mem_dest, mem_reg_dest, id_rn, id_reg_src1, id_reg_src2;
 
 wire [11:0] id_shift_operand, id_reg_shift_operand;
 wire [23:0] id_signed_imm_24, id_reg_signed_imm_24;
 wire [31:0] branch_address, if_pc, id_pc, if_instruction, id_instruction, wb_value, id_val_rn, id_val_rm,
 			id_reg_pc, id_reg_val_rn, id_reg_val_rm, exe_alu_result, exe_reg_alu_result, exe_reg_val_rm,
-			mem_alu_result, mem_mem_data, mem_data, mem_reg_alu_result, mem_reg_mem_data;
+			mem_alu_result, mem_mem_data, mem_data, mem_reg_alu_result, mem_reg_mem_data, exe_val_rm;
 
 
 IF_stage #(.BIT_NUMBER(32), .MEM_VOL(2**10)) if_unit(
@@ -59,7 +60,7 @@ EXE_stage #(.BIT_NUMBER(32)) exe_unit (
   .shift_operand(id_reg_shift_operand),
   .signed_imm_24(id_reg_signed_imm_24),
   .sr(id_reg_sr), .sel_src1(sel_src1), .sel_src2(sel_src2),
-	.wb_dest(wb_value), .mem_addr(exe_reg_alu_result),
+	.wb_value(wb_value), .mem_addr(exe_reg_alu_result),
   .alu_result(exe_alu_result), .br_addr(branch_address),
   .status(exe_sr), .val_rm(exe_val_rm)
   );

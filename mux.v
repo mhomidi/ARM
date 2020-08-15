@@ -5,7 +5,7 @@ endmodule // MUX 2
 
 
 module MUX3 #(parameter  BIT_NUMBER = 32) (
-  input [BIT_NUMBER-1:0] first, second, third, input sel, output [BIT_NUMBER-1:0] out);
+  input [BIT_NUMBER-1:0] first, second, third, input [1:0] sel, output [BIT_NUMBER-1:0] out);
 
   assign out = (sel == 1) ? second : (sel == 2) ? third : first;
 endmodule // MUX3
