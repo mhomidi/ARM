@@ -32,7 +32,7 @@ endmodule
 
 
 module InstructionMemory #(parameter  BIT_NUMBER = 8, parameter MEM_VOL = 2**10) (
-  input [BIT_NUMBER-1:0] in,
+  input [4*BIT_NUMBER-1:0] in,
   input   rst, 
   output reg [4*BIT_NUMBER-1:0] out
   );
